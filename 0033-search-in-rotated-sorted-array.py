@@ -3,18 +3,17 @@ class Solution:
         l, r = 0, len(nums)
         expected = None
         while l < r:
-            i = len(nums) // 2
-            if list[i] == target:
+            i = (l + r) // 2
+            if nums[i] == target:
                 return i
-            elif list[i] < target:
-                # if the value at i is less than the target, then our left point
-                # is now i, and we'd expect our next value at i to be *greater*
-                expected = "greater"
+            if nums[l] > nums[r]:
+                if nums[i] > target:
+                    r = i
+                elif nums[i] < target
+                    l = i
+            elif nums[i] < target:
                 l = i
-            elif list[i] > target:
-                # in the opposite case, we move r, and we'd expect the new value
-                # at i to be *less*
-                expected = "less"
+            elif nums[i] > target:
                 r = i
 
         # If we never find an unexpected number (one which is greater when it should be less, or vice versa),
@@ -32,7 +31,30 @@ class Solution:
         # 
         # However, if it looked like this:
         #
-        # [7, 8, 9, 0, 1], target = 0
+        # [7, 8, 9, -4, -3, -2, -1, 0, 2, 4, 5], target = 0
+        #  l                                 r
+        # The middle here is -2, which we know is less than 0. -2 is also less than v[r], so we can treat this normally.
+
+        # [4,5,6,-1,0,1,2] target=5
+        #  l            r
+        # The middle here is 7, which is greather than 0, so we would normally set r to be at 7.
+        # HOWEVER, because our value at l is GREATER than our target 0, we instead move l to be at 7.
+        #
+        # [4,5,6,7,0,1,2] target=3
+        #  l           r
+        # Them middle here is 7, which is greater than our target, so we would normally set r to be at 7.
+        # Because v[r] < target < v[l], return -1
+        #
+        # [4,5,6,7,0,1,2] target=5
+        #  l           r
+        # 7 > 5, move r to be 7 because v[l] < target
+
+        # possibilities:
+        #     v[m] > target AND v[l] < target ->   normal (r->m)
+        #     v[m] > target AND v[l] > target -> abnormal (l->m)
+        #     v[m] < target AND v[r] < target -> abnormal (r->m)
+        #     v[m] < target AND v[r] > target ->   normal (l->m)
+
         #
         # Then we'd find a 9 when we should expect something less than 1.
         #
