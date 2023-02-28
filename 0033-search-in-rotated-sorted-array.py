@@ -1,20 +1,27 @@
+from typing import List
+
 class Solution:
     def search(self, nums: List[int], target: int) -> int:
         l, r = 0, len(nums)
-        expected = None
         while l < r:
-            i = (l + r) // 2
-            if nums[i] == target:
-                return i
-            if nums[l] > nums[r]:
-                if nums[i] > target:
-                    r = i
-                elif nums[i] < target
-                    l = i
-            elif nums[i] < target:
-                l = i
-            elif nums[i] > target:
-                r = i
+            m = (l + r) // 2
+            if nums[m] == target:
+                return m
+            if nums[m] > target:
+                if nums[l] < target:
+                    r = m
+                elif nums[l] > target:
+                    l = m + 1
+                else:
+                    return l
+            elif nums[m] < target:
+                if nums[r-1] < target:
+                    r = m
+                elif nums[r-1] > target:
+                    l = m + 1
+                else:
+                    return r-1
+        return -1
 
         # If we never find an unexpected number (one which is greater when it should be less, or vice versa),
         # Then we know we've found the pivot, kinda. In the example below, the first iteration would find 1,
@@ -60,3 +67,12 @@ class Solution:
         #
         # Aha! I think that's the key! We just need to make sure that our value at l is less than the value at r
         # If it's not, then we need to move l to be at that value, or do the opposite if v[r] is lower than v[l]
+
+x = Solution()
+print(x.search([4, 5, 6, 7, 0, 1, 2], 0))
+print(x.search([4, 5, 6, 7, 0, 1, 2], 3))
+print(x.search([4, 5, 6, 7, 0, 1, 2], 8))
+print(x.search([1], 0))
+print(x.search([4, 5, 6, -1, 0, 1, 2], 5))
+print(x.search([7, 8, 9, -4, -3, -2, -1, 0, 2, 4, 5], 0))
+print(x.search([1], 1))
